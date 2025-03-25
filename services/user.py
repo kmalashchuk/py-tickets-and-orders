@@ -1,6 +1,7 @@
 from typing import Optional
 from db.models import User
 
+
 def create_user(
         username: str,
         password: str,
@@ -14,17 +15,18 @@ def create_user(
         user.email = email
 
     if first_name:
-       user.first_name = first_name
+        user.first_name = first_name
 
     if last_name:
         user.last_name = last_name
 
     user.save()
-    return  user
+    return user
 
 
 def get_user(user_id: int) -> Optional[User]:
     return User.objects.filter(id=user_id).first()
+
 
 def update_user(
         user_id: int,
@@ -45,7 +47,7 @@ def update_user(
     if email:
         user.email = email
     if first_name:
-       user.first_name = first_name
+        user.first_name = first_name
     if last_name:
         user.last_name = last_name
 
