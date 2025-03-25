@@ -1,6 +1,7 @@
 from typing import Optional, List
 from django.db import transaction
 from db.models import Order, Ticket, MovieSession, User
+from django.db.models import QuerySet
 
 
 def create_order(
@@ -11,10 +12,8 @@ def create_order(
     user, _ = User.objects.get_or_create(username=username)
 
     with transaction.atomic():
-        order = Order.objects.create(user=user)
-        if date:
-            order.created_at = date
-            order.save()
+        order = Order(user=user, created_at=date) if date else Order(user=user)
+        order.save()
 
         ticket_objects = [
             Ticket(
@@ -32,7 +31,7 @@ def create_order(
     return order
 
 
-def get_orders(username: Optional[str]) -> None:
+def get_orders(username: Optional[str]) -> QuerySet[Order]:
     orders = Order.objects.all()
     if username:
         orders = orders.filter(user__username=username)
